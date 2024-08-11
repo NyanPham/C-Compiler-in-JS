@@ -1,11 +1,3 @@
-const identifierPattern = /[a-zA-Z_]\w*\b/
-const constantPattern = /[0-9]+\b/
-const intKeyword = /int\b/
-const voidKeyword = /void\b/
-const returnKeyword = /return\b/
-const newlineKeyword = /\n/
-const whiteSpaceKeyword = /\s/
-
 const tokenPatterns = [
     { regex: /[0-9]+\b/, type: 'CONSTANT' },
     { regex: /[a-zA-Z_]\w*\b/, type: 'IDENTIFIER' },
@@ -19,7 +11,7 @@ const reg = tokenPatterns
         .join('|')
 const regExp = new RegExp(reg, 'g')
 
-const getTokenType(tokenValue) {
+const getTokenType = (tokenValue) => {
     const currPattern = tokenPatterns.find(pattern => pattern.regex.test(tokenValue))
     if (currPattern == null) throw new Error("Unknown token type")
     
