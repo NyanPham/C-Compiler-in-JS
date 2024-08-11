@@ -35,27 +35,26 @@ const getTokenType = (tokenValue) => {
     return currPattern.type
 }
 
-const lexer = (input) => {
+const tokenize = (input) => {
     const tokens = []
 
     while (input.length > 0) {
-        if (input.startsWith(' ')) {
-	        input = input.trim()
+        if (input.startsWith(' ') || input.startsWith('\n')) {
+            input = input.trimStart()
         } else {
             const match = input.match(regExp)
 
             if (!match) {
                 throw new Error("Failed to tokenize")
-            }
+            }   
 
             tokens.push({ value: match[0], type: getTokenType(match[0])  }) 
             input = input.slice(match[0].length)
+            input = input.trimStart()
         } 
     }
-
+    
     return tokens
 }
 
-module.exports = { 
-    lexer
-}
+module.exports = tokenize
