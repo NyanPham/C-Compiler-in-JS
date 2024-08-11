@@ -30,7 +30,7 @@ const lexer = (input) => {
     const tokens = []
 
     while (input.length > 0) {
-        if (input.startsWith(' ') {
+        if (input.startsWith(' ')) {
 	    input = input.trimStart()
 	} else {
 	    const match = input.match(regExp)
@@ -38,7 +38,7 @@ const lexer = (input) => {
                 throw new Error("Failed to tokenize")
 	    }
 
-	    tokens.push({ value: match[0], type: getTokenType(match[0])  })) 
+	    tokens.push({ value: match[0], type: getTokenType(match[0])  }) 
 	    input = input.slice(match[0].length)
 	} 
     }
