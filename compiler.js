@@ -9,6 +9,7 @@ const tokenize = require("./lexer.js")
 const compile = (data) => {
     const tokens = tokenize(data)
     console.log(tokens)
+    return tokens
 }
 
 if (process.argv.length < 3) {
