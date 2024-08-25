@@ -1,0 +1,23 @@
+export enum TokenType {
+    Constant = "CONSTANT",
+    Identifier = "IDENTIFIER",
+    IntKeyword = "INT_KEYWORD",
+    VoidKeyword = "VOID_KEYWORD",
+    ReturnKeyword = "RETURN_KEYWORD",
+    OpenParenthesis = "OPEN_PARENTHESIS",
+    CloseParenthesis = "CLOSE_PARENTHESIS",
+    OpenBrace = "OPEN_BRACE",
+    CloseBrace = "CLOSE_BRACE",
+    Semicolon = "SEMICOLON",
+}
+  
+export type Token = {
+    value: string,
+    type: TokenType
+}
+
+export enum ValidateTokenErrors {
+    NoErrors = 0,
+    MustWordBoundary = 1,
+  }
+  
