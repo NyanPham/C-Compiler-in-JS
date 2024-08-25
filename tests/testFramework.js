@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const childProcess = require('child_process');
 
-const testsFolder = process.argv[2];
+const testsFolder = path.join(__dirname, process.argv[2]);
 if (!testsFolder) {
   console.error('Error: testsFolder is required as a command-line argument');
   process.exit(1);
@@ -21,7 +21,7 @@ fs.readdirSync(testsFolder).forEach((subfolder) => {
     fs.readdirSync(subfolderPath).forEach((file) => {
       if (path.extname(file) === '.c') {
         const filePath = path.join(subfolderPath, file);
-        const command = `node ../compiler.js ${filePath}`;
+        const command = `npm start ${filePath}`;
         testCount++;
         console.log(`Running test: ${subfolder}/${file}`);
         try {
@@ -71,3 +71,4 @@ if (warningFilePaths.length > 0) {
 const resultsFile = `${testsFolder}.json`;
 fs.writeFileSync(resultsFile, JSON.stringify(results, null, 2));
 console.log(`Results saved to ${resultsFile}`);
+
