@@ -1,4 +1,5 @@
 import { TokenType, Token, ValidateTokenErrors } from "./types"
+import isAllLowerCase from "./util/isAllLowercase"
 
 const tokenPatterns = [
   { regex: /\b[0-9]+\b/, type: TokenType.Constant },
@@ -18,7 +19,7 @@ const keywordTokens = [
 ]
 
 const isKeyword = (tokenValue : string) : boolean => {
-    return keywordTokens.includes(tokenValue as TokenType);
+    return keywordTokens.includes((tokenValue.toUpperCase() + "_KEYWORD") as TokenType);
 }
 
 const removeComments = (input : string) : string => {
@@ -26,10 +27,10 @@ const removeComments = (input : string) : string => {
 }
 
 const getTokenType = (tokenValue: string) : TokenType => {
-  if (isKeyword(tokenValue)) {
-    return (tokenValue as TokenType)
+  if (isKeyword(tokenValue) && isAllLowerCase(tokenValue)) {
+    return ((tokenValue.toUpperCase() + "_KEYWORD") as TokenType)
   }
-  
+
   const currPattern = tokenPatterns.find((pattern) => pattern.regex.test(tokenValue))
   if (currPattern == null) throw new Error(`Unknown token type of ${tokenValue}`)
 
@@ -49,15 +50,20 @@ const validateToken = (token: Token): ValidateTokenErrors => {
 const tokenize = (input: string): Array<Token> => {
   try {
     const tokens: Array<Token> = []
-    input = removeComments(input)
+    input = removeComments(input).trim()
 
     while (input.length > 0) {
       if (input.startsWith(" ") || input.startsWith("\n")) {
         input = input.trimStart()
       } else {
+
         const match = tokenPatterns
-          .map((pattern) => input.match(pattern.regex))
-          .filter((match) => match?.index === 0)
+          .map((pattern) => {
+            return input.match(pattern.regex)
+          })
+          .filter((match) => {
+            return match?.index === 0
+          })
           .reduce(
             (longest, curr) => {
               if (!longest) return curr; 
