@@ -12,12 +12,12 @@ export interface FunctionDefinitionInterface {
 
 export interface StatementInterface {
   type: "Statement" | "ReturnStatement"
-  argument: ExpressionInterface
+  argument: ExpressionInterface | null
 }
   
 export interface ReturnStatementInterface extends StatementInterface {
   type: "ReturnStatement"
-  argument: ExpressionInterface
+  argument: ExpressionInterface | null
 }
 
 export interface ExpressionInterface {

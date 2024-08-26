@@ -4,19 +4,21 @@
  */
 
 import { ProgramInterface } from "./ast/interfaces";
-import { Token } from "./types";
+import { parseReturnType, Token } from "./types";
+import * as AssemblyInteface from './assemblyConstructs/interfaces'
 
 const fs = require('fs');
 const tokenize = require("./lexer.ts")
 const parse = require('./parser.ts')
 
-const prettyPrinter = require('./util/prettyPrinter.ts')
+const { prettyPrintAst } = require('./util/prettyPrinter.ts')
 
 const compile = (input: string): ProgramInterface | void => {
-    try {
+    try {   
         const tokens : Array<Token> = tokenize(input)
-        const ast : ProgramInterface = parse(tokens)
-        prettyPrinter(ast)
+        const { ast, assemblyConstruct } : parseReturnType = parse(tokens)
+        
+        prettyPrintAst(ast)
 
         return ast
     } catch (err) {

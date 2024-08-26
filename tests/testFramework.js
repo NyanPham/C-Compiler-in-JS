@@ -8,12 +8,13 @@ if (!testsFolder) {
   process.exit(1);
 }
 
-let testCount = 0;
-let passCount = 0;
-let failCount = 0;
-let warningCount = 0;
-let warningFilePaths = [];
-let results = {};
+const testResults = {
+  pass: 0,
+  fail: 0,
+  warning: 0,
+  warningFilePaths: [],
+  results: {},
+};
 
 fs.readdirSync(testsFolder).forEach((subfolder) => {
   const subfolderPath = path.join(testsFolder, subfolder);
@@ -22,29 +23,28 @@ fs.readdirSync(testsFolder).forEach((subfolder) => {
       if (path.extname(file) === '.c') {
         const filePath = path.join(subfolderPath, file);
         const command = `npm start ${filePath}`;
-        testCount++;
         console.log(`Running test: ${subfolder}/${file}`);
         try {
           const output = childProcess.execSync(command, { encoding: 'utf8' });
           if (output && subfolder.startsWith('valid')) {
-            passCount++;
-            results[`${subfolder}/${file}`] = output.trim();
+            testResults.pass++;
+            testResults.results[`${subfolder}/${file}`] = output.trim();
             console.log(`  PASS`);
           } else if (output && subfolder.startsWith('invalid')) {
-            warningCount++;
-            results[`${subfolder}/${file}`] = output.trim();
-            warningFilePaths.push(`${subfolder}/${file}`);
+            testResults.warning++;
+            testResults.results[`${subfolder}/${file}`] = output.trim();
+            testResults.warningFilePaths.push(`${subfolder}/${file}`);
             console.log(`  WARNING: No errors occurred, scrutinize more`);
           } else {
-            failCount++;
+            testResults.fail++;
             console.log(`  FAIL`);
           }
         } catch (error) {
           if (subfolder.startsWith('invalid')) {
-            passCount++;
+            testResults.pass++;
             console.log(`  PASS`);
           } else {
-            failCount++;
+            testResults.fail++;
             console.log(`  FAIL`);
           }
         }
@@ -53,22 +53,23 @@ fs.readdirSync(testsFolder).forEach((subfolder) => {
   }
 });
 
-console.log(results)
+// console.log(testResults.results);
 
 console.log(`Test Summary:`);
-console.log(`  Total Tests: ${testCount}`);
-console.log(`  Passed: ${passCount}`);
-console.log(`  Failed: ${failCount}`);
-console.log(`  Warnings: ${warningCount}`);
+console.log(`  Total Tests: ${testResults.pass + testResults.fail + testResults.warning}`);
+console.log(`  Passed: ${testResults.pass}`);
+console.log(`  Failed: ${testResults.fail}`);
+console.log(`  Warnings: ${testResults.warning}`);
 
-if (warningFilePaths.length > 0) {
+if (testResults.warningFilePaths.length > 0) {
   console.log('Warning File Paths:');
-  warningFilePaths.forEach((filePath) => {
+  testResults.warningFilePaths.forEach((filePath) => {
     console.log(`  ${filePath}`);
   });
 }
-
+  
 const resultsFile = `${testsFolder}.json`;
-fs.writeFileSync(resultsFile, JSON.stringify(results, null, 2));
+fs.writeFileSync(resultsFile, JSON.stringify(testResults.results, null, 2));
 console.log(`Results saved to ${resultsFile}`);
+
 

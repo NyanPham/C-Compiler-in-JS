@@ -1,3 +1,6 @@
+import { AssemblyProgramInterface } from "./assemblyConstructs/interfaces"
+import { ProgramInterface } from "./ast/interfaces"
+
 export enum TokenType {
     Constant = "CONSTANT",
     Identifier = "IDENTIFIER",
@@ -21,3 +24,7 @@ export enum ValidateTokenErrors {
     MustWordBoundary = 1,
   }
   
+export type parseReturnType = {
+    ast: ProgramInterface
+    assemblyConstruct: AssemblyProgramInterface
+}
