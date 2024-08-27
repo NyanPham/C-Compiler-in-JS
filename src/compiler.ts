@@ -3,9 +3,11 @@
  * node compiler.js PATH/TO/FILENAME.c
  */
 
+import { AssemblyProgramInterface } from "./assemblyConstructs/interfaces";
 import { ProgramInterface } from "./ast/interfaces";
+import astToAssembly from "./util/convertAstToAssemblyConstructs";
 import { parseReturnType, Token } from "./types";
-import * as AssemblyInteface from './assemblyConstructs/interfaces'
+import emitAssemly from "./util/assemblyEmission";
 
 const fs = require('fs');
 const tokenize = require("./lexer.ts")
@@ -16,11 +18,12 @@ const { prettyPrintAst } = require('./util/prettyPrinter.ts')
 const compile = (input: string): ProgramInterface | void => {
     try {   
         const tokens : Array<Token> = tokenize(input)
-        const { ast, assemblyConstruct } : parseReturnType = parse(tokens)
+        const ast : ProgramInterface = parse(tokens)
+        const assemblyAst : AssemblyProgramInterface = astToAssembly(ast)
+        const assembly = emitAssemly(assemblyAst)
+        console.log(assembly)
+        // prettyPrintAst(ast)emitAssemly
         
-        prettyPrintAst(ast)
-
-        return ast
     } catch (err) {
         if (err instanceof Error)
             console.log(`Compile Error: ${err.message}`)
