@@ -18,10 +18,11 @@ const { prettyPrintAst } = require('./util/prettyPrinter.ts')
 const compile = (input: string): ProgramInterface | void => {
     try {   
         const tokens : Array<Token> = tokenize(input)
-        const ast : ProgramInterface = parse(tokens)
-        const assemblyAst : AssemblyProgramInterface = astToAssembly(ast)
-        const assembly = emitAssemly(assemblyAst)
-        console.log(assembly)
+        console.log(tokens)
+        // const ast : ProgramInterface = parse(tokens)
+        // const assemblyAst : AssemblyProgramInterface = astToAssembly(ast)
+        // const assembly = emitAssemly(assemblyAst)
+        // console.log(assembly)
         // prettyPrintAst(ast)emitAssemly
         
     } catch (err) {

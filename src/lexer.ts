@@ -12,6 +12,9 @@ const tokenPatterns = [
   { regex: /\{/, type: TokenType.OpenBrace },
   { regex: /\}/, type: TokenType.CloseBrace },
   { regex: /;/, type: TokenType.Semicolon },
+  { regex: /~/, type: TokenType.BitwiseComplement },
+  { regex: /--/, type: TokenType.DecrementOperator },
+  { regex: /-/, type: TokenType.NegationOperator },
 ]
 
 const keywordTokens = [
@@ -30,7 +33,7 @@ const getTokenType = (tokenValue: string) : TokenType => {
   if (isKeyword(tokenValue) && isAllLowerCase(tokenValue)) {
     return ((tokenValue.toUpperCase() + "_KEYWORD") as TokenType)
   }
-
+  
   const currPattern = tokenPatterns.find((pattern) => pattern.regex.test(tokenValue))
   if (currPattern == null) throw new Error(`Unknown token type of ${tokenValue}`)
 
@@ -56,7 +59,7 @@ const tokenize = (input: string): Array<Token> => {
       if (input.startsWith(" ") || input.startsWith("\n")) {
         input = input.trimStart()
       } else {
-
+        
         const match = tokenPatterns
           .map((pattern) => {
             return input.match(pattern.regex)
@@ -71,16 +74,16 @@ const tokenize = (input: string): Array<Token> => {
             },
             [""] 
           ) as RegExpMatchArray
-
+        
         if (!match || match[0].length === 0) {
           throw new Error(`Failed to tokenize of ${match?.[0]}`)
         }
 
-        const token = {
+        const token : Token = {
           value: match[0],
           type: getTokenType(match[0]),
-        } as Token
-
+        }
+        
         const validateResult = validateToken(token)
         if (validateResult !== ValidateTokenErrors.NoErrors) {
           if (validateResult === ValidateTokenErrors.MustWordBoundary)
