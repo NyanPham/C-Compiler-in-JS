@@ -12,7 +12,7 @@ export enum TokenType {
     OpenBrace = "OPEN_BRACE",
     CloseBrace = "CLOSE_BRACE",
     Semicolon = "SEMICOLON",
-    BitwiseComplement = "BITWISE_COMPLEMENT",
+    BitwiseComplementOperator = "BITWISE_COMPLEMENT_OPERATOR",
     NegationOperator = "NEGATION_OPERATOR",
     DecrementOperator = "DECREMENT_OPERATOR",
 }
