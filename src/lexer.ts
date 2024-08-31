@@ -12,7 +12,7 @@ const tokenPatterns = [
   { regex: /\{/, type: TokenType.OpenBrace },
   { regex: /\}/, type: TokenType.CloseBrace },
   { regex: /;/, type: TokenType.Semicolon },
-  { regex: /~/, type: TokenType.BitwiseComplement },
+  { regex: /~/, type: TokenType.ComplementOperator },
   { regex: /--/, type: TokenType.DecrementOperator },
   { regex: /-/, type: TokenType.NegationOperator },
 ]

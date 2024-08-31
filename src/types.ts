@@ -12,9 +12,14 @@ export enum TokenType {
     OpenBrace = "OPEN_BRACE",
     CloseBrace = "CLOSE_BRACE",
     Semicolon = "SEMICOLON",
-    BitwiseComplementOperator = "BITWISE_COMPLEMENT_OPERATOR",
+    ComplementOperator = "COMPLEMENT_OPERATOR",
     NegationOperator = "NEGATION_OPERATOR",
     DecrementOperator = "DECREMENT_OPERATOR",
+}
+
+export enum Operator {
+    Complement = "Complement",
+    Negate = "Negate"
 }
   
 export type Token = {

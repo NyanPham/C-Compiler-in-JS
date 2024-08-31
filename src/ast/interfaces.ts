@@ -1,3 +1,5 @@
+import { Operator } from "../types"
+
 // Define the types for the AST nodes
 export interface ProgramInterface {
   type: "Program"
@@ -21,12 +23,18 @@ export interface ReturnStatementInterface extends StatementInterface {
 }
 
 export interface ExpressionInterface {
-  type: "Expression" | "ConstantExpression"
+  type: "Expression" | "ConstantExpression" | "UnaryOperatorExpression"
 }
 
 export interface ConstantExpressionInterface extends ExpressionInterface {
   type: "ConstantExpression"
   value: number
+}
+
+export interface UnaryOperatorExpressionInterface extends ExpressionInterface {
+  type: "UnaryOperatorExpression"
+  operator: Operator
+  argument: ExpressionInterface
 }
 
 export interface IdentifierInterface {

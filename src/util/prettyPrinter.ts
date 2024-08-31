@@ -1,18 +1,39 @@
-import { ConstantExpressionInterface, ProgramInterface } from "../ast/interfaces"
+import { ConstantExpressionInterface, ExpressionInterface, ProgramInterface, StatementInterface, UnaryOperatorExpressionInterface } from "../ast/interfaces"
+
+const printUnaryOperator = (operator: UnaryOperatorExpressionInterface, indexLevel: number): string => {
+    return (`${operator.operator}(${printExpression(operator.argument, indexLevel + 1)})`
+    )
+}
+
+const printExpression = (expression : ExpressionInterface, indexLevel: number): string => {
+    const indent = " ".repeat(indexLevel * 2);
+
+    if (expression.type === "ConstantExpression") {
+        return `${indent}${expression.type}(${expression.type === "ConstantExpression" ? `(${(expression as ConstantExpressionInterface).value})` : ""})` 
+    } else if (expression.type === "UnaryOperatorExpression") {
+        return `${indent}${printUnaryOperator(expression as UnaryOperatorExpressionInterface, indexLevel)}`
+    } else {
+        return ""
+    }
+}
+
+const printStatement = (statement : StatementInterface, indexLevel: number): string => {
+    const indent = " ".repeat(indexLevel * 2);
+
+    return  `${indent}${statement.type}(${printExpression(statement.argument as ExpressionInterface, indexLevel + 1)})`
+}
 
 const prettyPrintAst = (program : ProgramInterface) => {
     const functions = program.body
     
-    console.log(`${program.type}(
+    console.log(
+`${program.type}(
 ${functions.map(func => {
-    return `    ${func.type}(
-        name="${func.name.name}"
-        body=${func.body.map(statement => {
-            return `${statement.type}(
-                ${statement.argument?.type}${statement.argument?.type === "ConstantExpression" ? `(${(statement.argument as ConstantExpressionInterface).value})` : ""}
-            )`
-        })}
-    )`
+    return `\t${func.type}(
+        \t\tname="${func.name.name}"
+        \t\tbody=${func.body.map(statement => printStatement(statement, 2)).join(",\n")}
+        \t\t
+    \t)`
 })}
 )`)
 }

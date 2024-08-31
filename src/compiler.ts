@@ -19,11 +19,12 @@ const compile = (input: string): ProgramInterface | void => {
     try {   
         const tokens : Array<Token> = tokenize(input)
         console.log(tokens)
-        // const ast : ProgramInterface = parse(tokens)
+        const ast : ProgramInterface = parse(tokens)
+        prettyPrintAst(ast)
+        return ast
         // const assemblyAst : AssemblyProgramInterface = astToAssembly(ast)
         // const assembly = emitAssemly(assemblyAst)
         // console.log(assembly)
-        // prettyPrintAst(ast)emitAssemly
         
     } catch (err) {
         if (err instanceof Error)

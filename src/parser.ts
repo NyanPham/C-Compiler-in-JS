@@ -1,9 +1,16 @@
 import { ExpressionInterface, FunctionDefinitionInterface, IdentifierInterface, ProgramInterface, StatementInterface } from "./ast/interfaces"
-import { ConstantExpression, FunctionDefinition, Identifier, Program, ReturnStatement } from "./ast/nodes"
-import { Token, TokenType } from "./types"
+import { ConstantExpression, FunctionDefinition, Identifier, Program, ReturnStatement, UnaryOperator } from "./ast/nodes"
+import { Operator, Token, TokenType } from "./types"
 
 const takeToken = (tokens : Array<Token>) : Token => {
-    return tokens.splice(0, 1)[0]
+    const [token] = tokens;
+    tokens.shift();
+    return token;
+}
+
+const peekToken = (tokens : Array<Token>) : Token => {
+    const [token] = tokens;
+    return token;
 }
 
 const parseProgram = (tokens: Array<Token>) : ProgramInterface => {
@@ -34,7 +41,7 @@ const parseFunction = (tokens: Array<Token>) : FunctionDefinitionInterface => {
 
 const parseStatement = (tokens: Array<Token>) : StatementInterface => {
     expect(TokenType.ReturnKeyword, tokens)
-    const returnVal : ExpressionInterface = parseExp(tokens)
+    const returnVal : ExpressionInterface = parseExpression(tokens)
     expect(TokenType.Semicolon, tokens)
     return new ReturnStatement(returnVal)
 }
@@ -46,10 +53,42 @@ const parseIdentifier = (tokens: Array<Token>) : IdentifierInterface => {
     }   
     return new Identifier(token.value)
 }
+
+const parseUnaryOperator = (tokens: Array<Token>): Operator => {
+    const token = takeToken(tokens)
+    switch (token.type) {
+        case TokenType.ComplementOperator:
+            return Operator.Complement
+        case TokenType.NegationOperator:
+            return Operator.Negate
+        default:
+            throw new Error(`Expected a unary operator but got ${token.type}`)
+    }
+}
     
-const parseExp = (tokens: Array<Token>) : ExpressionInterface => {
-    const value = expect(TokenType.Constant, tokens)?.value
-    return new ConstantExpression(parseInt(value))
+const parseExpression = (tokens: Array<Token>) : ExpressionInterface => {
+    const nextToken = peekToken(tokens)
+
+    switch(nextToken.type) {
+        case TokenType.Constant: {
+            takeToken(tokens)
+            return new ConstantExpression(parseInt(nextToken.value))
+        }
+        case TokenType.ComplementOperator:
+        case TokenType.NegationOperator: {
+            const op: Operator = parseUnaryOperator(tokens)
+            const innerExpression = parseExpression(tokens)
+            return new UnaryOperator(op, innerExpression)
+        }
+        case TokenType.OpenParenthesis: {
+            takeToken(tokens)
+            const innerExpression = parseExpression(tokens)
+            expect(TokenType.CloseParenthesis, tokens)
+            return innerExpression
+        }
+        default:
+            throw new Error("Unexpected token: " + nextToken.type)
+    }
 }
 
 const expect = (expected: TokenType, tokens : Array<Token>) : Token => {
