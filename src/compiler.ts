@@ -8,6 +8,8 @@ import { ProgramInterface } from "./ast/interfaces";
 import astToAssembly from "./util/convertAstToAssemblyConstructs";
 import { parseReturnType, Token } from "./types";
 import emitAssemly from "./util/assemblyEmission";
+import { TackyProgramInterface } from "./tacky/interfaces";
+import emitTackyProgram from "./tacky/emitTacky";
 
 const fs = require('fs');
 const tokenize = require("./lexer.ts")
@@ -18,9 +20,10 @@ const { prettyPrintAst } = require('./util/prettyPrinter.ts')
 const compile = (input: string): ProgramInterface | void => {
     try {   
         const tokens : Array<Token> = tokenize(input)
-        console.log(tokens)
         const ast : ProgramInterface = parse(tokens)
-        prettyPrintAst(ast)
+        const tackyProgram: TackyProgramInterface = emitTackyProgram(ast)
+        
+        // prettyPrintAst(ast)
         return ast
         // const assemblyAst : AssemblyProgramInterface = astToAssembly(ast)
         // const assembly = emitAssemly(assemblyAst)
