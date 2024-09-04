@@ -8,7 +8,7 @@ import { ProgramInterface } from "./ast/interfaces";
 import astToAssembly from "./util/convertAstToAssemblyConstructs";
 import { parseReturnType, Token } from "./types";
 import emitAssemly from "./util/assemblyEmission";
-import { TackyProgramInterface } from "./tacky/interfaces";
+import { TackyInstructionInterface, TackyProgramInterface } from "./tacky/interfaces";
 import emitTackyProgram from "./tacky/emitTacky";
 
 const fs = require('fs');
@@ -22,7 +22,7 @@ const compile = (input: string): ProgramInterface | void => {
         const tokens : Array<Token> = tokenize(input)
         const ast : ProgramInterface = parse(tokens)
         const tackyProgram: TackyProgramInterface = emitTackyProgram(ast)
-        
+        const assemblyAst: AssemblyProgramInterface | void = astToAssembly(tackyProgram)
         // prettyPrintAst(ast)
         return ast
         // const assemblyAst : AssemblyProgramInterface = astToAssembly(ast)

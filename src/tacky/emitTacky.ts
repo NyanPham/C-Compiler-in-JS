@@ -25,8 +25,9 @@ const emitTacky = (e: ExpressionInterface, instructions: TackyInstructionInterfa
 
 const emitReturnTacky = (e: ReturnStatementInterface, instructions: TackyInstructionInterface[]) => {
     const returnVal = emitTacky(e.argument as ExpressionInterface, instructions)
-    return new TackyReturn(returnVal)
+    instructions.push(new TackyReturn(returnVal))
 }
+
 
 const convertUneryOperator = (op: Operator) => {
     switch (op) {

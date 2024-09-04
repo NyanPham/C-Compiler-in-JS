@@ -1,58 +1,61 @@
+import { AssemblyFunctionDefinition, AssemblyImmediateValue, AssemblyMoveInstruction, AssemblyProgram, AssemblyPseudoIdentifier, AssemblyRegister, AssemblyReturnInstruction } from "../assemblyConstructs/constructs";
+import { AssemblyInstructionInterface, AssemblyProgramInterface, RegisterName } from "../assemblyConstructs/interfaces";
+import { TackyConstantInterface, TackyProgramInterface, TackyReturnInterface, TackyUnaryInterface, TackyVariableInterface } from "../tacky/interfaces";
 
-import { AssemblyFunctionDefinition, AssemblyImmediateValue, AssemblyMoveInstruction, AssemblyProgram, AssemblyRegister, AssemblyReturnInstruction } from "../assemblyConstructs/constructs"
-import { AssemblyFunctionDefinitionInterface, AssemblyInstructionInterface, AssemblyOperandInterface, AssemblyProgramInterface } from "../assemblyConstructs/interfaces"
-import { ConstantExpressionInterface, ExpressionInterface, FunctionDefinitionInterface, IdentifierInterface, ProgramInterface, ReturnStatementInterface, StatementInterface } from "../ast/interfaces"
-import { ConstantExpression, FunctionDefinition, Identifier, Program, ReturnStatement } from "../ast/nodes"
+const astToAssembly = (program: TackyProgramInterface): AssemblyProgramInterface | void => {
+  const instructions: AssemblyInstructionInterface[] = []
+  const tackyInstructions = program.functionDefinition.body
 
-const astToAssembly = (program: ProgramInterface): AssemblyProgramInterface => {
-    const assemblyFuncs : AssemblyFunctionDefinitionInterface[] =program.body.map((funcDef) => {
-      const instructions : AssemblyInstructionInterface[] = funcDef.body.flatMap((statement) => {
-        return convertStatementToAssembly(statement);
-      });
-
-      return new AssemblyFunctionDefinition((funcDef.name.name), instructions);
-    });
-
-    const assemblyProgram : AssemblyProgramInterface = new AssemblyProgram(assemblyFuncs[0]);
-
-    return assemblyProgram;
-  };
-  
-  const convertStatementToAssembly = (statement: StatementInterface): AssemblyInstructionInterface[] => {
-    switch (statement.type) {
-      case "ReturnStatement":
-        return convertReturnStatementToAssembly(statement as ReturnStatement);
-      default:
-        throw new Error(`Unsupported statement type: ${statement.type}`);
+  tackyInstructions.forEach(f => {
+    if (f.type === 'TackyReturn') {
+      convertToAssemblyReturn(f as TackyReturnInterface, instructions)
     }
-  };
-  
-  const convertReturnStatementToAssembly = (statement: ReturnStatementInterface): AssemblyInstructionInterface[] => {
-    const instructions : AssemblyInstructionInterface[] = []
-    if (statement.argument != null) {
-      const sourceOperand = convertExpressionToAssemblyOperand(statement.argument);
-      const moveInstruction = new AssemblyMoveInstruction(sourceOperand, new AssemblyRegister("eax"));
-      instructions.push(moveInstruction)
+
+    if (f.type === 'TackyUnary') {
+      convertToAssemblyUnary(f as TackyUnaryInterface, instructions)
+    }
+  })
+
+  const functionDefinition = new AssemblyFunctionDefinition(program.functionDefinition.identifier, instructions)
+  return new AssemblyProgram(functionDefinition)
+};
+
+const convertToAssemblyReturn = (inst: TackyReturnInterface, instructions: AssemblyInstructionInterface[]) => {
+  switch (inst.value.type) {
+    case 'TackyConstant': {
+      const moveInst = new AssemblyMoveInstruction(new AssemblyImmediateValue((inst.value as TackyConstantInterface).value), new AssemblyRegister(RegisterName.AX))
+      instructions.push(moveInst)
+      break
     } 
-    
-    const returnInstruction = new AssemblyReturnInstruction();
-    instructions.push(returnInstruction)
-
-    return instructions;
-  };
-  
-  const convertExpressionToAssemblyOperand = (expression: ExpressionInterface): AssemblyOperandInterface => {
-    switch (expression.type) {
-      case "ConstantExpression":
-        return convertConstantExpressionToAssemblyOperand(expression as ConstantExpression);
-      default:
-        throw new Error(`Unsupported expression type: ${expression.type}`);
+    case 'TackyVariable': {
+      const moveInst = new AssemblyMoveInstruction(new AssemblyPseudoIdentifier((inst.value as TackyVariableInterface).name), new AssemblyRegister(RegisterName.AX))
+      instructions.push(moveInst)
+      break
     }
-  };
+    default:
+      throw new Error('Unsupported value type: ' + inst.value.type)
+  }
 
-  const convertConstantExpressionToAssemblyOperand = (expression: ConstantExpressionInterface): AssemblyOperandInterface => {
-    const value = expression.value;
-    return new AssemblyImmediateValue(value);
-  };
+  const retInst = new AssemblyReturnInstruction()
+  instructions.push(retInst)
+}
+
+const convertToAssemblyUnary = (inst: TackyUnaryInterface, instructions: AssemblyInstructionInterface[]) => {
+  switch (inst.src.type) {
+    case 'TackyConstant': {
+      const moveInst = new AssemblyMoveInstruction(new AssemblyImmediateValue((inst.src as TackyConstantInterface).value), new AssemblyPseudoIdentifier((inst.dst as TackyVariableInterface).name))
+      instructions.push(moveInst)
+      break
+    }
+    case 'TackyVariable': {
+      const moveInst = new AssemblyMoveInstruction(new AssemblyPseudoIdentifier((inst.src as TackyVariableInterface).name), new AssemblyPseudoIdentifier((inst.dst as TackyVariableInterface).name))
+      instructions.push(moveInst)
+      break
+    }
+    default: {
+      throw new Error('Unsupported src type: ' + inst.src.type)
+    }
+  }
+}
 
 export default astToAssembly

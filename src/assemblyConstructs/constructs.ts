@@ -1,4 +1,4 @@
-import { AssemblyProgramInterface, AssemblyFunctionDefinitionInterface, AssemblyInstructionInterface, AssemblyMoveInstructionInterface, AssemblyReturnInstructionInterface, AssemblyOperandInterface, AssemblyImmediateValueInterface, AssemblyRegisterInterface } from "./interfaces";
+import { AssemblyProgramInterface, AssemblyFunctionDefinitionInterface, AssemblyInstructionInterface, AssemblyMoveInstructionInterface, AssemblyReturnInstructionInterface, AssemblyOperandInterface, AssemblyImmediateValueInterface, AssemblyRegisterInterface, RegisterName, AssemblyUnaryInstructionInterface, AssemblyOperator, AssemblyAllocateStackInstructionInterface, AssemblyStackInterface, AssemblyPseudoIdentifierInterface } from "./interfaces";
 
 export class AssemblyProgram implements AssemblyProgramInterface {
     type: "AssemblyProgram" = "AssemblyProgram";
@@ -48,9 +48,47 @@ export class AssemblyImmediateValue implements AssemblyImmediateValueInterface {
 
 export class AssemblyRegister implements AssemblyRegisterInterface {
     type: "Register" = "Register";
-    name: string;
+    register: RegisterName;
 
-    constructor(name: string) {
-        this.name = name;
+    constructor(register: string) {
+        this.register = register as RegisterName;
+    }
+}
+
+export class AssemblyUnaryInstruction implements AssemblyUnaryInstructionInterface {
+    type: "UnaryInstruction" = "UnaryInstruction";
+    operator: AssemblyOperator;
+    operand: AssemblyOperandInterface;
+
+    constructor(operator: AssemblyOperator, operand: AssemblyOperandInterface) {
+        this.operator = operator;
+        this.operand = operand;
+    }
+}
+
+export class AssemblyAllocateStackInstruction implements AssemblyAllocateStackInstructionInterface {
+    type: "AllocateStackInstruction" = "AllocateStackInstruction";
+    size: number;
+
+    constructor(size: number) {
+        this.size = size;
+    }
+}
+
+export class AssemblyPseudoIdentifier implements AssemblyPseudoIdentifierInterface {
+    type: "PseudoIdentifier" = "PseudoIdentifier";
+    identifier: string;
+
+    constructor(identifier: string) {
+        this.identifier = identifier;
+    }
+}
+
+export class AssemblyStack implements AssemblyStackInterface {
+    type: "Stack" = "Stack";
+    offset: number;
+
+    constructor(offset: number) {
+        this.offset = offset;
     }
 }
