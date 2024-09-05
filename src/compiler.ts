@@ -3,7 +3,7 @@
  * node compiler.js PATH/TO/FILENAME.c
  */
 
-import { AssemblyProgramInterface } from "./assemblyConstructs/interfaces";
+import { AssemblyInstructionInterface, AssemblyProgramInterface } from "./assemblyConstructs/interfaces";
 import { ProgramInterface } from "./ast/interfaces";
 import astToAssembly from "./util/convertAstToAssemblyConstructs";
 import { parseReturnType, Token } from "./types";
@@ -23,6 +23,10 @@ const compile = (input: string): ProgramInterface | void => {
         const ast : ProgramInterface = parse(tokens)
         const tackyProgram: TackyProgramInterface = emitTackyProgram(ast)
         const assemblyAst: AssemblyProgramInterface | void = astToAssembly(tackyProgram)
+        console.log(assemblyAst)
+        assemblyAst?.functionDefinition.instructions.forEach((inst: AssemblyInstructionInterface) => {
+            console.log(inst)
+        })
         // prettyPrintAst(ast)
         return ast
         // const assemblyAst : AssemblyProgramInterface = astToAssembly(ast)

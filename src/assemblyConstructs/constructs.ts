@@ -23,8 +23,7 @@ export class AssemblyFunctionDefinition implements AssemblyFunctionDefinitionInt
 export class AssemblyMoveInstruction implements AssemblyMoveInstructionInterface {
     type: "MoveInstruction" = "MoveInstruction";
     source: AssemblyOperandInterface;
-    destination: AssemblyOperandInterface;
-        
+    destination: AssemblyOperandInterface;  
     constructor(source: AssemblyOperandInterface, destination: AssemblyOperandInterface) {
         this.source = source;
         this.destination = destination;
@@ -69,7 +68,7 @@ export class AssemblyUnaryInstruction implements AssemblyUnaryInstructionInterfa
 export class AssemblyAllocateStackInstruction implements AssemblyAllocateStackInstructionInterface {
     type: "AllocateStackInstruction" = "AllocateStackInstruction";
     size: number;
-
+    
     constructor(size: number) {
         this.size = size;
     }
