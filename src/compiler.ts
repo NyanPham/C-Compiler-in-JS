@@ -23,15 +23,10 @@ const compile = (input: string): ProgramInterface | void => {
         const ast : ProgramInterface = parse(tokens)
         const tackyProgram: TackyProgramInterface = emitTackyProgram(ast)
         const assemblyAst: AssemblyProgramInterface | void = astToAssembly(tackyProgram)
-        console.log(assemblyAst)
-        assemblyAst?.functionDefinition.instructions.forEach((inst: AssemblyInstructionInterface) => {
-            console.log(inst)
-        })
-        // prettyPrintAst(ast)
-        return ast
-        // const assemblyAst : AssemblyProgramInterface = astToAssembly(ast)
-        // const assembly = emitAssemly(assemblyAst)
-        // console.log(assembly)
+        if (assemblyAst == null) return
+        
+        const assembly = emitAssemly(assemblyAst)
+        console.log(assembly)
         
     } catch (err) {
         if (err instanceof Error)
