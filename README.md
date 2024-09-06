@@ -16,9 +16,48 @@ The project aims to create a C compiler from scratch using JavaScript. The compi
 
 ## Progress
 
-Currently working on: lexical analysis
+### Phase 1: Minimal Compiler
+From C:
+```
+int main(void) {
+    return 2;
+}
+```
 
-Next step: syntax analysis
+To x64 Assembly:
+```
+    .globl main
+main:
+    movl $2, %eax
+    ret
+```
+
+### Phase 2: Unary Operators
+
+From C:
+```
+int main(void) {
+    return ~(-2);
+}
+```
+
+To x64 Assembly:
+```
+    .globl main
+main:
+    pushq %rbp
+    movq %rsp, %rbp
+    subq $8, %rsp
+    movl $2, -4(%rbp)
+    negl -4(%rbp)
+    movl -4(%rbp), %r10d
+    movl %r10d, -8(%rbp)
+    notl -8(%rbp)
+    movl -8(%rbp), %eax
+    movq %rbp, %rsp
+    popq %rbp
+    ret
+```
 
 ## Dependencies
 
