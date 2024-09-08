@@ -15,19 +15,20 @@ const emitFunctionInstructionsCode = (functionDefinition: AssemblyFunctionDefini
 
     assemblyCode += `\t.globl ${functionDefinition.name}\n`
     assemblyCode += `${functionDefinition.name}:\n`
+    assemblyCode += `\t; Prologue: \n`
     assemblyCode += '\tpushq %rbp\n'
     assemblyCode += '\tmovq %rsp, %rbp\n'
 
     for (const instruction of functionDefinition.instructions) {
         switch(instruction.type) {
+            case "AllocateStackInstruction":
+                assemblyCode += getAllocateStackInstructionCode(instruction as AssemblyAllocateStackInstructionInterface)
+                break
             case "MoveInstruction":
                 assemblyCode += getMoveInstructionCode(instruction as AssemblyMoveInstructionInterface)
                 break
             case "ReturnInstruction":
                 assemblyCode += getReturnInstructionCode()
-                break
-            case "AllocateStackInstruction":
-                assemblyCode += getAllocateStackInstructionCode(instruction as AssemblyAllocateStackInstructionInterface)
                 break
             case "UnaryInstruction":
                 assemblyCode += getUnaryInstructionCode(instruction as AssemblyUnaryInstructionInterface)
@@ -80,9 +81,9 @@ const getUnaryInstructionCode = (instruction: AssemblyUnaryInstructionInterface)
 
     return `\t${unaryOperator} ${operand}\n`
 }
-
+    
 const getAllocateStackInstructionCode = (instruction: AssemblyAllocateStackInstructionInterface) => {
-    return `\tsubq $${instruction.size}, %rsp\n`
+    return `\tsubq $${instruction.size}, %rsp\n\n`
 }
 
 const getMoveInstructionCode = (instruction: AssemblyMoveInstructionInterface) => {
@@ -93,7 +94,8 @@ const getMoveInstructionCode = (instruction: AssemblyMoveInstructionInterface) =
 }
 
 const getReturnInstructionCode = () => {
-    let assemblyCode = `\tmovq %rbp, %rsp\n`
+    let assemblyCode = `\n\t; Epilogue: \n`
+    assemblyCode += `\tmovq %rbp, %rsp\n`
     assemblyCode += `\tpopq %rbp\n`
     assemblyCode += `\tret\n`
     return assemblyCode
