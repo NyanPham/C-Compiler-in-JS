@@ -1,4 +1,4 @@
-import { Operator } from "../types"
+import { BinaryOperator_t, UnaryOperator_t } from "../types"
 
 // Define the types for the AST nodes
 export interface ProgramInterface {
@@ -23,7 +23,7 @@ export interface ReturnStatementInterface extends StatementInterface {
 }
 
 export interface ExpressionInterface {
-  type: "Expression" | "ConstantExpression" | "UnaryOperatorExpression"
+  type: "Expression" | "ConstantExpression" | "UnaryOperatorExpression" | "BinaryOperatorExpression"
 }
 
 export interface ConstantExpressionInterface extends ExpressionInterface {
@@ -33,8 +33,15 @@ export interface ConstantExpressionInterface extends ExpressionInterface {
 
 export interface UnaryOperatorExpressionInterface extends ExpressionInterface {
   type: "UnaryOperatorExpression"
-  operator: Operator
+  operator: UnaryOperator_t
   argument: ExpressionInterface
+}
+
+export interface BinaryOperatorExpressionInterface extends ExpressionInterface {
+  type: "BinaryOperatorExpression"
+  operator: BinaryOperator_t
+  left: ExpressionInterface
+  right: ExpressionInterface
 }
 
 export interface IdentifierInterface {

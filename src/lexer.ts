@@ -15,6 +15,10 @@ const tokenPatterns = [
   { regex: /~/, type: TokenType.ComplementOperator },
   { regex: /--/, type: TokenType.DecrementOperator },
   { regex: /-/, type: TokenType.NegationOperator },
+  { regex: /\+/, type: TokenType.AddOperator },
+  { regex: /\*/, type: TokenType.MultiplyOperator },
+  { regex: /\//, type: TokenType.DivideOperator },
+  { regex: /%/, type: TokenType.RemainderOperator },
 ]
 
 const keywordTokens = [

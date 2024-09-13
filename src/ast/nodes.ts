@@ -1,5 +1,5 @@
-import { Operator } from "../types"
-import { ConstantExpressionInterface, ExpressionInterface, FunctionDefinitionInterface, IdentifierInterface, ProgramInterface, ReturnStatementInterface, StatementInterface, UnaryOperatorExpressionInterface } from "./interfaces"
+import { UnaryOperator_t, BinaryOperator_t } from "../types"
+import { BinaryOperatorExpressionInterface, ConstantExpressionInterface, ExpressionInterface, FunctionDefinitionInterface, IdentifierInterface, ProgramInterface, ReturnStatementInterface, StatementInterface, UnaryOperatorExpressionInterface } from "./interfaces"
 
 /**
  * <statement> ::= "return" <exp> ";" | "if" "(" <exp> ")" <statement> [ "else" <statement> ]
@@ -27,7 +27,12 @@ export class ConstantExpression implements ConstantExpressionInterface {
 
 export class UnaryOperator implements UnaryOperatorExpressionInterface {
   type: "UnaryOperatorExpression" = "UnaryOperatorExpression"
-  constructor(public operator: Operator, public argument: ExpressionInterface) {}
+  constructor(public operator: UnaryOperator_t, public argument: ExpressionInterface) {}
+}
+
+export class BinaryOperator implements BinaryOperatorExpressionInterface {
+  type: "BinaryOperatorExpression" = "BinaryOperatorExpression"
+  constructor(public operator: BinaryOperator_t, public left: ExpressionInterface, public right: ExpressionInterface) {}
 }
 
 export class Identifier implements IdentifierInterface {

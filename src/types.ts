@@ -15,11 +15,23 @@ export enum TokenType {
     ComplementOperator = "COMPLEMENT_OPERATOR",
     NegationOperator = "NEGATION_OPERATOR",
     DecrementOperator = "DECREMENT_OPERATOR",
+    AddOperator = "ADD_OPERATOR",
+    MultiplyOperator = "MULTIPLY_OPERATOR",
+    DivideOperator = "DIVIDE_OPERATOR",
+    RemainderOperator = "REMAINDER_OPERATOR",
 }
 
-export enum Operator {
+export enum UnaryOperator_t {
     Complement = "Complement",
     Negate = "Negate"
+}
+
+export enum BinaryOperator_t {
+    Add = "Add",
+    Subtract = "Subtract",
+    Multiply = "Multiply",
+    Divide = "Divide",
+    Remainder = "Remainder"
 }
   
 export type Token = {

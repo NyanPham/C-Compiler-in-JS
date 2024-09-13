@@ -9,7 +9,6 @@ const emitAssemly = (assemblyAst: AssemblyProgramInterface) => {
     return assemblyCode
 }
 
-
 const emitFunctionInstructionsCode = (functionDefinition: AssemblyFunctionDefinitionInterface) => {
     let assemblyCode = `\n`
 
@@ -81,7 +80,7 @@ const getUnaryInstructionCode = (instruction: AssemblyUnaryInstructionInterface)
 
     return `\t${unaryOperator} ${operand}\n`
 }
-    
+
 const getAllocateStackInstructionCode = (instruction: AssemblyAllocateStackInstructionInterface) => {
     return `\tsubq $${instruction.size}, %rsp\n\n`
 }

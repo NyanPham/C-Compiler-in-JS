@@ -15,18 +15,20 @@ const fs = require('fs');
 const tokenize = require("./lexer.ts")
 const parse = require('./parser.ts')
 
-const { prettyPrintAst } = require('./util/prettyPrinter.ts')
+const printAst = require('./util/printAst.ts')
 
 const compile = (input: string): ProgramInterface | void => {
     try {   
         const tokens : Array<Token> = tokenize(input)
         const ast : ProgramInterface = parse(tokens)
-        const tackyProgram: TackyProgramInterface = emitTackyProgram(ast)
-        const assemblyAst: AssemblyProgramInterface | void = astToAssembly(tackyProgram)
-        if (assemblyAst == null) return
         
-        const assembly = emitAssemly(assemblyAst)
-        console.log(assembly)
+        printAst(ast)
+        // const tackyProgram: TackyProgramInterface = emitTackyProgram(ast)
+        // const assemblyAst: AssemblyProgramInterface | void = astToAssembly(tackyProgram)
+        // if (assemblyAst == null) return
+        
+        // const assembly = emitAssemly(assemblyAst)
+        // console.log(assembly)
         
     } catch (err) {
         if (err instanceof Error)
