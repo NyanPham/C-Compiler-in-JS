@@ -1,6 +1,14 @@
-export enum TackyOperator {
+export enum TackyUnaryOperator_t {
     Complement = "Complement",
     Negate = "Negate"
+}
+
+export enum TackyBinaryOperator_t {
+    Add = "Add",
+    Subtract = "Subtract",
+    Multiply = "Multiply",
+    Divide = "Divide",
+    Remainder = "Remainder",
 }
 
 export interface TackyProgramInterface {
@@ -15,7 +23,7 @@ export interface TackyFunctionDefinitionInterface {
 }
 
 export interface TackyInstructionInterface {
-    type: "TackyInstruction" | "TackyReturn" | "TackyUnary"
+    type: "TackyInstruction" | "TackyReturn" | "TackyUnary" | "TackyBinary"
 }
 
 export interface TackyReturnInterface extends TackyInstructionInterface {
@@ -25,10 +33,19 @@ export interface TackyReturnInterface extends TackyInstructionInterface {
 
 export interface TackyUnaryInterface extends TackyInstructionInterface {
     type: "TackyUnary"
-    unaryOperator: TackyOperator
+    unaryOperator: TackyUnaryOperator_t
     src: TackyValueInterface
     dst: TackyValueInterface
 }
+
+export interface TackyBinaryInterface extends TackyInstructionInterface {
+    type: "TackyBinary"
+    binaryOperator: TackyBinaryOperator_t
+    src1: TackyValueInterface
+    src2: TackyValueInterface
+    dst: TackyValueInterface
+}
+
 
 export interface TackyValueInterface {
     type: "TackyValue" | "TackyConstant" | "TackyVariable"

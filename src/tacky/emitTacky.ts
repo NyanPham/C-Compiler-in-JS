@@ -1,7 +1,7 @@
-import { ConstantExpressionInterface, ExpressionInterface, FunctionDefinitionInterface, ProgramInterface, ReturnStatementInterface, UnaryOperatorExpressionInterface } from "../ast/interfaces";
-import { Operator } from "../types";
-import { TackyConstant, TackyFunctionDefinition, TackyProgram, TackyReturn, TackyUnary, TackyVariable } from "./ast";
-import { TackyInstructionInterface, TackyOperator, TackyProgramInterface } from "./interfaces";
+import { BinaryOperatorExpressionInterface, ConstantExpressionInterface, ExpressionInterface, FunctionDefinitionInterface, ProgramInterface, ReturnStatementInterface, UnaryOperatorExpressionInterface } from "../ast/interfaces";
+import { BinaryOperator_t, UnaryOperator_t } from "../types";
+import { TackyBinary, TackyConstant, TackyFunctionDefinition, TackyProgram, TackyReturn, TackyUnary, TackyVariable } from "./ast";
+import { TackyInstructionInterface, TackyUnaryOperator_t, TackyProgramInterface, TackyBinaryOperator_t } from "./interfaces";
 
 const emitTacky = (e: ExpressionInterface, instructions: TackyInstructionInterface[]) => {
     switch (e.type) {
@@ -13,10 +13,21 @@ const emitTacky = (e: ExpressionInterface, instructions: TackyInstructionInterfa
             const src = emitTacky(exp.argument, instructions)
             const dstName = makeTemporary()
             const dst = new TackyVariable(dstName)
-            const tackyOp = convertUneryOperator(exp.operator)
+            const tackyOp : TackyUnaryOperator_t = convertUneryOperator(exp.operator)
             instructions.push(new TackyUnary(tackyOp, src, dst))
 
             return dst            
+        }
+        case "BinaryOperatorExpression": {
+            const exp = e as BinaryOperatorExpressionInterface
+            const v1 = emitTacky(exp.left, instructions)
+            const v2 = emitTacky(exp.right, instructions)
+            const dstName = makeTemporary()
+            const dst = new TackyVariable(dstName)
+            const tackyOp : TackyBinaryOperator_t = convertBinaryOperator(exp.operator)
+            instructions.push(new TackyBinary(tackyOp, v1, v2, dst))
+            
+            return dst
         }
         default:
             throw new Error("Unsupported expression type: " + e.type)
@@ -29,14 +40,31 @@ const emitReturnTacky = (e: ReturnStatementInterface, instructions: TackyInstruc
 }
 
 
-const convertUneryOperator = (op: Operator) => {
+const convertUneryOperator = (op: UnaryOperator_t) => {
     switch (op) {
-        case Operator.Complement:
-            return TackyOperator.Complement
-        case Operator.Negate:
-            return TackyOperator.Negate
+        case UnaryOperator_t.Complement:
+            return TackyUnaryOperator_t.Complement
+        case UnaryOperator_t.Negate:
+            return TackyUnaryOperator_t.Negate
         default:
             throw new Error("Unsupported unary operator: " + op)
+    }
+}
+
+const convertBinaryOperator = (op: BinaryOperator_t) => {
+    switch (op) {
+        case BinaryOperator_t.Add:
+            return TackyBinaryOperator_t.Add
+        case BinaryOperator_t.Subtract:
+            return TackyBinaryOperator_t.Subtract
+        case BinaryOperator_t.Multiply:
+            return TackyBinaryOperator_t.Multiply
+        case BinaryOperator_t.Divide:
+            return TackyBinaryOperator_t.Divide
+        case BinaryOperator_t.Remainder:
+            return TackyBinaryOperator_t.Remainder
+        default:
+            throw new Error("Unsupported binary operator: " + op)
     }
 }
 

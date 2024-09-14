@@ -1,4 +1,4 @@
-import { TackyConstantInterface, TackyFunctionDefinitionInterface, TackyInstructionInterface, TackyOperator, TackyProgramInterface, TackyReturnInterface, TackyUnaryInterface, TackyValueInterface, TackyVariableInterface } from "./interfaces"
+import { TackyConstantInterface, TackyFunctionDefinitionInterface, TackyInstructionInterface, TackyUnaryOperator_t, TackyProgramInterface, TackyReturnInterface, TackyUnaryInterface, TackyValueInterface, TackyVariableInterface, TackyBinaryInterface, TackyBinaryOperator_t } from "./interfaces"
 
 export class TackyProgram implements TackyProgramInterface {
     type: "TackyProgram" = "TackyProgram"
@@ -17,7 +17,12 @@ export class TackyReturn implements TackyReturnInterface {
 
 export class TackyUnary implements TackyUnaryInterface {
     type: "TackyUnary" = "TackyUnary"
-    constructor(public unaryOperator: TackyOperator, public src: TackyValue, public dst: TackyValue) {}
+    constructor(public unaryOperator: TackyUnaryOperator_t, public src: TackyValue, public dst: TackyValue) {}
+}
+
+export class TackyBinary implements TackyBinaryInterface {
+    type: "TackyBinary" = "TackyBinary"
+    constructor(public binaryOperator: TackyBinaryOperator_t, public src1: TackyValue, public src2: TackyValue, public dst: TackyValue) {}
 }
 
 export class TackyValue implements TackyValueInterface {
