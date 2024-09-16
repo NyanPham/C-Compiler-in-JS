@@ -1,4 +1,4 @@
-import { AssemblyProgramInterface, AssemblyFunctionDefinitionInterface, AssemblyInstructionInterface, AssemblyMoveInstructionInterface, AssemblyReturnInstructionInterface, AssemblyOperandInterface, AssemblyImmediateValueInterface, AssemblyRegisterInterface, RegisterName, AssemblyUnaryInstructionInterface, AssemblyOperator, AssemblyAllocateStackInstructionInterface, AssemblyStackInterface, AssemblyPseudoIdentifierInterface } from "./interfaces";
+import { AssemblyProgramInterface, AssemblyFunctionDefinitionInterface, AssemblyInstructionInterface, AssemblyMoveInstructionInterface, AssemblyReturnInstructionInterface, AssemblyOperandInterface, AssemblyImmediateValueInterface, AssemblyRegisterInterface, RegisterName, AssemblyUnaryInstructionInterface, AssemblyUnaryOperator_t, AssemblyAllocateStackInstructionInterface, AssemblyStackInterface, AssemblyPseudoIdentifierInterface, AssemblyBinaryInstructionInterface, AssemblyBinaryOperator_t, AssemblyIDivInstructionInterface, AssemblyCdqInstructionInterface } from "./interfaces";
 
 export class AssemblyProgram implements AssemblyProgramInterface {
     type: "AssemblyProgram" = "AssemblyProgram";
@@ -56,13 +56,40 @@ export class AssemblyRegister implements AssemblyRegisterInterface {
 
 export class AssemblyUnaryInstruction implements AssemblyUnaryInstructionInterface {
     type: "UnaryInstruction" = "UnaryInstruction";
-    operator: AssemblyOperator;
+    operator: AssemblyUnaryOperator_t;
     operand: AssemblyOperandInterface;
 
-    constructor(operator: AssemblyOperator, operand: AssemblyOperandInterface) {
+    constructor(operator: AssemblyUnaryOperator_t, operand: AssemblyOperandInterface) {
         this.operator = operator;
         this.operand = operand;
     }
+}
+
+export class AssemblyBinaryInstruction implements AssemblyBinaryInstructionInterface {
+    type: "BinaryInstruction" = "BinaryInstruction";
+    operator: AssemblyBinaryOperator_t;
+    srcOperand: AssemblyOperandInterface;
+    dstOperand: AssemblyOperandInterface;
+
+    constructor(operator: AssemblyBinaryOperator_t, srcOperand: AssemblyOperandInterface, dstOperand: AssemblyOperandInterface) {
+        this.operator = operator;
+        this.srcOperand = srcOperand;
+        this.dstOperand = dstOperand;
+    }
+}
+
+export class AssemblyIDivInstruction implements AssemblyIDivInstructionInterface {
+    type: "Idiv" = "Idiv";
+    operand: AssemblyOperandInterface;
+
+
+    constructor(operand: AssemblyOperandInterface) {
+        this.operand = operand;
+    }
+}
+
+export class AssemblyCdqInstruction implements AssemblyCdqInstructionInterface {
+    type: "Cdq" = "Cdq";
 }
 
 export class AssemblyAllocateStackInstruction implements AssemblyAllocateStackInstructionInterface {

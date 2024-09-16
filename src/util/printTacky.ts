@@ -18,11 +18,11 @@ function printTackyProgram(program: TackyProgramInterface): void {
                 break;
             case "TackyUnary":
                 const tackyUnary = instruction as TackyUnaryInterface
-                console.log(`${"  ".repeat(indent + 2)}TackyUnary(operator: ${tackyUnary.unaryOperator}, src: ${tackyUnary.src}, dst: ${tackyUnary.dst})`);
+                console.log(`${"  ".repeat(indent + 2)}TackyUnary(operator: ${tackyUnary.operator}, src: ${tackyUnary.src}, dst: ${tackyUnary.dst})`);
                 break;
             case "TackyBinary":
                 const tackyBinary = instruction as TackyBinaryInterface
-                console.log(`${"  ".repeat(indent + 2)}TackyBinary(operator: ${tackyBinary.binaryOperator}, src1: ${tackyBinary.src1}, src2: ${tackyBinary.src2}, dst: ${tackyBinary.dst})`);
+                console.log(`${"  ".repeat(indent + 2)}TackyBinary(operator: ${tackyBinary.operator}, src1: ${tackyBinary.src1}, src2: ${tackyBinary.src2}, dst: ${tackyBinary.dst})`);
                 break;
             default:
                 throw new Error(`Unsupported instruction type: ${instruction.type}`);

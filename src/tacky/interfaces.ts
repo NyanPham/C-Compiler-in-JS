@@ -33,14 +33,14 @@ export interface TackyReturnInterface extends TackyInstructionInterface {
 
 export interface TackyUnaryInterface extends TackyInstructionInterface {
     type: "TackyUnary"
-    unaryOperator: TackyUnaryOperator_t
+    operator: TackyUnaryOperator_t
     src: TackyValueInterface
     dst: TackyValueInterface
 }
 
 export interface TackyBinaryInterface extends TackyInstructionInterface {
     type: "TackyBinary"
-    binaryOperator: TackyBinaryOperator_t
+    operator: TackyBinaryOperator_t
     src1: TackyValueInterface
     src2: TackyValueInterface
     dst: TackyValueInterface

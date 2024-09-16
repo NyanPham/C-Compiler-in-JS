@@ -1,13 +1,24 @@
 // Define the types for the AST nodes for assembly language
 
-export enum AssemblyOperator {
+export enum AssemblyUnaryOperator_t {
     Complement = "Not",
     Negate = "Neg"
 }
 
+// Note: Divide and Remainer operators are handled execeptionally
+export enum AssemblyBinaryOperator_t {
+    Add = "Add",
+    Subtract = "Sub",
+    Multiply = "Mult",
+    // Divide = "Divide", 
+    // Remainder = "Remainder",
+}
+
 export enum RegisterName {
     AX = 'AX',
+    DX = 'DX',
     R10 = 'R10',
+    R11 = 'R11',
 }
 
 export interface AssemblyProgramInterface {
@@ -22,13 +33,29 @@ export interface AssemblyFunctionDefinitionInterface {
 }
 
 export interface AssemblyInstructionInterface {
-    type: "Instruction" | "MoveInstruction" | "ReturnInstruction" | "UnaryInstruction" | "AllocateStackInstruction",
+    type: "Instruction" | "MoveInstruction" | "ReturnInstruction" | "UnaryInstruction" | "BinaryInstruction" | "Idiv" | "Cdq" | "AllocateStackInstruction",
 }
 
 export interface AssemblyUnaryInstructionInterface {
     type: "UnaryInstruction",
-    operator: AssemblyOperator,
+    operator: AssemblyUnaryOperator_t,
     operand: AssemblyOperandInterface,
+}
+
+export interface AssemblyBinaryInstructionInterface {
+    type: "BinaryInstruction",
+    operator: AssemblyBinaryOperator_t,
+    srcOperand: AssemblyOperandInterface,
+    dstOperand: AssemblyOperandInterface,
+}
+
+export interface AssemblyIDivInstructionInterface extends AssemblyInstructionInterface {
+    type: "Idiv",
+    operand: AssemblyOperandInterface
+}
+
+export interface AssemblyCdqInstructionInterface extends AssemblyInstructionInterface {
+    type: "Cdq",
 }
 
 export interface AssemblyAllocateStackInstructionInterface extends AssemblyInstructionInterface {

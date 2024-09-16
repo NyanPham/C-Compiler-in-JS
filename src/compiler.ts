@@ -7,7 +7,7 @@ import { AssemblyInstructionInterface, AssemblyProgramInterface } from "./assemb
 import { ProgramInterface } from "./ast/interfaces";
 import astToAssembly from "./util/convertAstToAssemblyConstructs";
 import { parseReturnType, Token } from "./types";
-import emitAssemly from "./util/assemblyEmission";
+
 import { TackyInstructionInterface, TackyProgramInterface } from "./tacky/interfaces";
 import emitTackyProgram from "./tacky/emitTacky";
 
@@ -23,12 +23,15 @@ const compile = (input: string): ProgramInterface | void => {
         const tokens : Array<Token> = tokenize(input)
         const ast : ProgramInterface = parse(tokens)
         const tackyProgram: TackyProgramInterface = emitTackyProgram(ast)
-        // printTacky(tackyProgram)
-        console.log(tackyProgram)
-        tackyProgram.functionDefinition.body.forEach(i => console.log(i))
-        // const assemblyAst: AssemblyProgramInterface | void = astToAssembly(tackyProgram)
-        // if (assemblyAst == null) return
+        const assemblyAst: AssemblyProgramInterface | void = astToAssembly(tackyProgram)
+        // console.log(assemblyAst)
+        // console.log("Instructions: \n")
             
+        if (assemblyAst == null) return
+
+        assemblyAst.functionDefinition.instructions.forEach((inst: AssemblyInstructionInterface) => {
+            console.log(inst)
+        })
         // const assembly = emitAssemly(assemblyAst)
         // console.log(assembly)
         

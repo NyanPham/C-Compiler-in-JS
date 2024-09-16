@@ -17,12 +17,12 @@ export class TackyReturn implements TackyReturnInterface {
 
 export class TackyUnary implements TackyUnaryInterface {
     type: "TackyUnary" = "TackyUnary"
-    constructor(public unaryOperator: TackyUnaryOperator_t, public src: TackyValue, public dst: TackyValue) {}
+    constructor(public operator: TackyUnaryOperator_t, public src: TackyValue, public dst: TackyValue) {}
 }
 
 export class TackyBinary implements TackyBinaryInterface {
     type: "TackyBinary" = "TackyBinary"
-    constructor(public binaryOperator: TackyBinaryOperator_t, public src1: TackyValue, public src2: TackyValue, public dst: TackyValue) {}
+    constructor(public operator: TackyBinaryOperator_t, public src1: TackyValue, public src2: TackyValue, public dst: TackyValue) {}
 }
 
 export class TackyValue implements TackyValueInterface {

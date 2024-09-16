@@ -1,6 +1,6 @@
-import { AssemblyAllocateStackInstructionInterface, AssemblyFunctionDefinitionInterface, AssemblyImmediateValueInterface, AssemblyInstructionInterface, AssemblyMoveInstructionInterface, AssemblyOperandInterface, AssemblyOperator, AssemblyProgramInterface, AssemblyRegisterInterface, AssemblyStackInterface, AssemblyUnaryInstructionInterface, RegisterName } from "../assemblyConstructs/interfaces";
+import { AssemblyAllocateStackInstructionInterface, AssemblyFunctionDefinitionInterface, AssemblyImmediateValueInterface, AssemblyInstructionInterface, AssemblyMoveInstructionInterface, AssemblyOperandInterface, AssemblyUnaryOperator_t, AssemblyProgramInterface, AssemblyRegisterInterface, AssemblyStackInterface, AssemblyUnaryInstructionInterface, RegisterName } from "./interfaces";
 
-const emitAssemly = (assemblyAst: AssemblyProgramInterface) => {
+const emitAssembly = (assemblyAst: AssemblyProgramInterface) => {
     let assemblyCode = ``
     
     const functionAssemblyCode = emitFunctionInstructionsCode(assemblyAst.functionDefinition)
@@ -66,10 +66,10 @@ const getUnaryInstructionCode = (instruction: AssemblyUnaryInstructionInterface)
     let unaryOperator = ''
 
     switch (instruction.operator) {
-        case AssemblyOperator.Complement:
+        case AssemblyUnaryOperator_t.Complement:
             unaryOperator = 'notl'
             break
-        case AssemblyOperator.Negate:
+        case AssemblyUnaryOperator_t.Negate:
             unaryOperator = 'negl'
             break
         default:
@@ -100,4 +100,4 @@ const getReturnInstructionCode = () => {
     return assemblyCode
 }
 
-export default emitAssemly
+export default emitAssembly
